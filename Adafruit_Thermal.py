@@ -186,7 +186,7 @@ class Adafruit_Thermal(Serial):
 			self.timeoutWait()
 			self.timeoutSet(len(args) * self.byteTime)
 			for arg in args:
-				super(Adafruit_Thermal, self).write(chr(arg))
+				super(Adafruit_Thermal, self).write(chr(arg).encode())
 
 	# Override write() method to keep track of paper feed.
 	def write(self, *data):
@@ -197,7 +197,7 @@ class Adafruit_Thermal(Serial):
 				continue
 			if c != 0x13:
 				self.timeoutWait()
-				super(Adafruit_Thermal, self).write(c)
+				super(Adafruit_Thermal, self).write(c.encode())
 				d = self.byteTime
 				if ((c == '\n') or
 				    (self.column == self.maxColumn)):
@@ -733,4 +733,3 @@ class Adafruit_Thermal(Serial):
 		for arg in args:
 			self.write(str(arg))
 		self.write('\n')
-
