@@ -178,7 +178,7 @@ class Adafruit_Thermal(Serial):
 		self.dotFeedTime  = f / 1000000.0
 
 	# 'Raw' byte-writing method
-	def writeBytes(self, *args, encoding='437'):
+	def writeBytes(self, *args):
 		if self.writeToStdout:
 			for arg in args:
 				sys.stdout.write(chr(arg))
@@ -186,7 +186,7 @@ class Adafruit_Thermal(Serial):
 			self.timeoutWait()
 			self.timeoutSet(len(args) * self.byteTime)
 			for arg in args:
-				super(Adafruit_Thermal, self).write(chr(arg).encode(encoding))
+				super(Adafruit_Thermal, self).write(chr(arg).encode())
 
 	# Override write() method to keep track of paper feed.
 	def write(self, *data, encoding='437'):
