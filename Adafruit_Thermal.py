@@ -95,45 +95,6 @@ class Adafruit_Thermal(Serial):
 			self.wake()
 			self.reset()
 
-			# Description of print settings from p. 23 of manual:
-			# ESC 7 n1 n2 n3 Setting Control Parameter Command
-			# Decimal: 27 55 n1 n2 n3
-			# max heating dots, heating time, heating interval
-			# n1 = 0-255 Max heat dots, Unit (8dots), Default: 7 (64 dots)
-			# n2 = 3-255 Heating time, Unit (10us), Default: 80 (800us)
-			# n3 = 0-255 Heating interval, Unit (10us), Default: 2 (20us)
-			# The more max heating dots, the more peak current
-			# will cost when printing, the faster printing speed.
-			# The max heating dots is 8*(n1+1).  The more heating
-			# time, the more density, but the slower printing
-			# speed.  If heating time is too short, blank page
-			# may occur.  The more heating interval, the more
-			# clear, but the slower printing speed.
-
-			heatTime = kwargs.get('heattime', self.defaultHeatTime)
-			self.writeBytes(
-			  27,       # Esc
-			  55,       # 7 (print settings)
-			  11,       # Heat dots
-			  heatTime, # Lib default
-			  40)       # Heat interval
-
-			# Description of print density from p. 23 of manual:
-			# DC2 # n Set printing density
-			# Decimal: 18 35 n
-			# D4..D0 of n is used to set the printing density.
-			# Density is 50% + 5% * n(D4-D0) printing density.
-			# D7..D5 of n is used to set the printing break time.
-			# Break time is n(D7-D5)*250us.
-			# (Unsure of default values -- not documented)
-
-			printDensity   = 10 # 100%
-			printBreakTime =  2 # 500 uS
-
-			self.writeBytes(
-			  18, # DC2
-			  35, # Print density
-			  (printBreakTime << 5) | printDensity)
 			self.dotPrintTime = 0.03
 			self.dotFeedTime  = 0.0021
 		else:
@@ -225,6 +186,7 @@ class Adafruit_Thermal(Serial):
 	# The bulk of this method was moved into __init__,
 	# but this is left here for compatibility with older
 	# code that might get ported directly from Arduino.
+	# seems not to work (prints garbage)
 	def begin(self, heatTime=defaultHeatTime):
 		self.writeBytes(
 		  27,       # Esc
